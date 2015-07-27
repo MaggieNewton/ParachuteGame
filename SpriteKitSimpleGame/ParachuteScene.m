@@ -8,12 +8,12 @@
 
 #import "ParachuteScene.h"
 #import "WolfScene.h"
-//#import "SpirometerEffortAnalyzer.h"
+#import "SpirometerEffortAnalyzer.h"
 
 @interface ParachuteScene()
 
 
-//@property (strong, nonatomic) SpirometerEffortAnalyzer* spiro;
+@property (strong, nonatomic) SpirometerEffortAnalyzer* spiro;
 
 @end
 
@@ -34,76 +34,6 @@ static const parachuteCategory = 0x1 << 0;
 static const mountainCategory = 0x1 << 1;
 static const outofboundsCategory = 0x1 << 2;
 
--(id)initWithSize:(CGSize)size {
-    if (self = [super initWithSize:size]) {
-        
-        /*background2 = [SKSpriteNode spriteNodeWithImageNamed:@"Background2.1.png"];
-        background2.size = self.frame.size;
-        background2.xScale = 2;
-        background2.yScale = 2;
-        
-        background2.position = (CGPoint){CGRectGetMidX(self.frame), CGRectGetMidY(self.frame)};
-        background2.zPosition = 0;
-       
-        SKTexture *mountainstexture = [SKTexture textureWithImageNamed:@"Mountains.png"];
-        mountains = [SKSpriteNode spriteNodeWithTexture:mountainstexture];
-        mountains.position = CGPointMake(800, 180);
-        mountains.zPosition = 1;
-        mountains.xScale = -2;
-        mountains.yScale = 3;
-        
-        SKTexture *parachuteTexture = [SKTexture textureWithImageNamed:@"Parachute.png"];
-        parachute = [SKSpriteNode spriteNodeWithTexture: parachuteTexture];
-        parachute.name = @"parachute";
-        currentposition = CGPointMake(50,10);
-        parachute.position = currentposition;
-        parachute.zPosition = 2;
-        parachute.xScale = -0.3;
-        parachute.yScale = 0.25;
-        parachute.name = @"player";
-        
-        CGPoint velocity=CGPointMake(10,15);
-        currentvelocity = velocity;*/
-        
-        
-        
-        /*parachute.physicsBody = [SKPhysicsBody bodyWithTexture:parachute.texture size:parachute.texture.size];
-        
-        self.physicsWorld.gravity = CGVectorMake(0, -5);
-      
-        
-        
-        parachute.physicsBody.linearDamping = 0;
-        parachute.physicsBody.friction = 0;
-        parachute.physicsBody.restitution = 0;
-        parachute.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:parachute.size];
-        
-        
-        SKNode *myWorld = [SKNode node];
-        myWorld.name = @"world";
-        [self addChild:myWorld];
-        myWorld.xScale = 1;
-        myWorld.yScale = 1;
-        
-        //create a camera node
-        SKNode *camera = [SKNode node];
-        camera.name = @"camera";
-        parachute.name = @"parachute";
-        [myWorld addChild:camera];
-        [myWorld addChild:parachute];
-        [myWorld addChild:background2];
-        [myWorld addChild:mountains];
-        
-        self.physicsWorld.gravity = CGVectorMake(0.0f, 0.0f);*/
-        
-        
-
-
-        
-    }
-    return self;
-
-}
 
 - (void)didMoveToView:(SKView *)view{
     
@@ -121,11 +51,16 @@ static const outofboundsCategory = 0x1 << 2;
     
     self.physicsWorld.contactDelegate = self;
     
-    [player.physicsBody applyImpulse: CGVectorMake(50,1000)];
+    
     //NSLog(@"camera works%@",player);
     
-    /*self.spiro = [[SpirometerEffortAnalyzer alloc] init];
-    self.spiro.delegate = self;*/
+    self.spiro = [[SpirometerEffortAnalyzer alloc] init];
+    self.spiro.delegate = self;
+    
+    //[self.spiro activateDebugAudioModeWithWAVFile:nil];
+    
+    [self.spiro beginListeningForEffort];
+    
     
 }
 
@@ -139,7 +74,6 @@ static const outofboundsCategory = 0x1 << 2;
 }
 
 -(void)update:(NSTimeInterval)currentTime{
-    [player.physicsBody applyImpulse: CGVectorMake(10,500)];
  
     /*currentvelocity.x = currentvelocity.x * 0.95;
     currentvelocity.y = currentvelocity.y * 0.95;
@@ -203,8 +137,9 @@ static const outofboundsCategory = 0x1 << 2;
     
 }
 
-/*- (IBAction)startEffort:(UIButton *)sender {
-    //self.feedbackLabel.text = @"Calibrating sound, please remain silent...";
+- (IBAction)startEffort:(UIButton *)sender {
+    //self.feedbackLabel.text =
+    NSLog(@"Calibrating sound, please remain silent...");
     [self.spiro beginListeningForEffort];
 }
 
@@ -215,30 +150,36 @@ static const outofboundsCategory = 0x1 << 2;
     [self.spiro requestThatCurrentEffortShouldCancel];
 }
 -(void)didFinishCalibratingSilence{
-    //self.feedbackLabel.text = @"Inhale deeply ...and blast out air when ready!";
+    //self.feedbackLabel.text =
+    NSLog(@"Inhale deeply ...and blast out air when ready!");
 }
 
 -(void)didTimeoutWaitingForTestToStart{
-    //self.feedbackLabel.text = @"No exhale heard, effort canceled";
+    //self.feedbackLabel.text =
+    NSLog(@"No exhale heard, effort canceled");
 }
 
 -(void)didStartExhaling{
-    //self.feedbackLabel.text = @"Keep blasting!!";
+    //self.feedbackLabel.text =
+    NSLog(@"Keep blasting!!");
 }
 
 -(void)willEndTestSoon{
-    //self.feedbackLabel.text = @"Try to push last air out!! Go, Go, Go!";
+    //self.feedbackLabel.text =
+    NSLog(@"Try to push last air out!! Go, Go, Go!");
 }
 
 -(void)didCancelEffort{
-    //self.feedbackLabel.text = @"Effort Cancelled";
+    //self.feedbackLabel.text =
+    NSLog(@"Effort Cancelled");
 }
 
 -(void)didEndEffortWithResults:(NSDictionary*)results{
     // right now results are an empty dictionary
     // in the future the results of the effort will all be stored as key/value pairs
     NSLog(@"%@",results);
-    //self.feedbackLabel.text = @"Effort Complete. Thanks!";
+    //self.feedbackLabel.text =
+    NSLog(@"Effort Complete. Thanks!");
 }
 
 -(void)didUpdateFlow:(float)flow andVolume:(float)volume{
@@ -248,8 +189,13 @@ static const outofboundsCategory = 0x1 << 2;
     
     //self.flowSlider.value = flow; // watch it jump around when updated
     //self.flowLabel.text = [NSString stringWithFormat:@"Flow: %.2f",flow];
+    //NSLog(@"Flow: %.2f", flow);
 }
-*/
+-(void)didUpdateAudioBufferWithMaximum:(float)maxAudioValue{
+    NSLog(@"%.2f", maxAudioValue);
+    [player.physicsBody applyImpulse: CGVectorMake(1000*maxAudioValue,4000*maxAudioValue)];
+}
+
 @end
 
 

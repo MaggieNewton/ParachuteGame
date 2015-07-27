@@ -7,9 +7,9 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
-//#import "SpirometerEffortAnalyzer.h"
+#import "SpirometerEffortAnalyzer.h"
 
-@interface ParachuteScene : SKScene <UIGestureRecognizerDelegate,SKPhysicsContactDelegate>
+@interface ParachuteScene : SKScene <UIGestureRecognizerDelegate,SKPhysicsContactDelegate,SpirometerEffortDelegate>
 
     @property (strong, nonatomic) UISwipeGestureRecognizer* swipeRightGesture;
     @property (strong, nonatomic) UIRotationGestureRecognizer* rotationGR;
